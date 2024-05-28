@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Receipt</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Add Receipt</h1>
+    </header>
+
+    <main>
+        <form id="add-receipt-form">
+            <label for="cid">Cartridge:</label>
+            <select id="cid" name="cid" required>
+                <!-- Options will be populated dynamically -->
+            </select>
+
+            <label for="cost">Cost:</label>
+            <input type="number" id="cost" name="cost" required>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+
+            <button type="submit">Add Receipt</button>
+        </form>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/cartridges')
+                .then(response => response.json())
+                .then(data => {
+                    const cidSelect = document.getElementById('cid');
+                    data.forEach(cartridge => {
+                        const option = document.createElement('option');
+                        option.value = cartridge.cid;
+                        option.textContent = cartridge.cartridge_name;
+                        cidSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching cartridges:', error);
+                });
+
+            document.getElementById('add-receipt-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(event.target);
+                const receiptData = {
+                    cid: formData.get('cid'),
+                    receipt_name: formData.get('cid'), // You can customize this if needed
+                    cost: formData.get('cost'),
+                    quantity: formData.get('quantity'),
+                };
+
+                fetch('/api/receipts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(receiptData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert('Receipt added successfully');
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Error adding receipt:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

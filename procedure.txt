@@ -1,0 +1,63 @@
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+    let p_message, p_error;
+
+    // Call the login procedure
+    connection.query('CALL login_procedure(?, ?, @p_message, @p_error)', [username, password], (err, results) => {
+        if (err) {
+            console.error('Error calling login procedure:', err);
+            return res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+        // Fetch the output parameters from MySQL session variables
+        connection.query('SELECT @p_message AS p_message, @p_error AS p_error', (err, results) => {
+            if (err) {
+                console.error('Error fetching session variables:', err);
+                return res.status(500).json({ error: 'Internal Server Error' });
+            }
+
+            // Extract the output parameters
+            const { p_message, p_error } = results[0];
+
+            // Check if there's an error
+            if (p_error) {
+                return res.status(401).json({ error: p_error });
+            }
+
+            // Otherwise, login was successful
+            res.json({ message: p_message });
+        });
+    });
+});
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE login_procedure (
+    IN p_username VARCHAR(255),
+    IN p_password VARCHAR(255),
+    OUT p_message VARCHAR(255),
+    OUT p_error VARCHAR(255)
+)
+BEGIN
+    DECLARE v_user_count INT;
+
+    -- Check if username and password match
+    SELECT COUNT(*) INTO v_user_count
+    FROM users
+    WHERE username = p_username AND password = p_password;
+
+    IF v_user_count > 0 THEN
+        -- Set the success message
+        SET p_message := 'Login successful';
+        SET p_error := NULL;
+    ELSE
+        -- Set the error message
+        SET p_message := NULL;
+        SET p_error := 'Invalid username or password';
+    END IF;
+END //
+
+DELIMITER ;
+

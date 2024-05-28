@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Cartridge</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Add New Cartridge</h1>
+    </header>
+    
+    <main>
+        <form id="add-cartridge-form">
+            <label for="name">Cartridge Name:</label>
+            <input type="text" id="name" name="name" required>
+            
+            <label for="printer-id">Printer:</label>
+            <select id="printer-id" name="printer_id" required>
+                <!-- Printer options will be populated here -->
+            </select>
+            
+            <label for="cost">Cost:</label>
+            <input type="number" id="cost" name="cost" step="0.01" required>
+            
+            <label for="vendor">Vendor:</label>
+            <input type="text" id="vendor" name="vendor" required>
+            
+            <label for="yield">Yield:</label>
+            <input type="number" id="yield" name="yield" required>
+            
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" required>
+            
+            <button type="submit">Add Cartridge</button>
+        </form>
+    </main>
+    
+    <footer>
+        <p>&copy; 2024</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/api/printers')
+                .then(response => response.json())
+                .then(data => {
+                    const printerSelect = document.getElementById('printer-id');
+                    data.forEach(printer => {
+                        const option = document.createElement('option');
+                        option.value = printer.pid;
+                        option.text = printer.pname;
+                        printerSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching printers:', error);
+                });
+
+            document.getElementById('add-cartridge-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = {
+                    name: formData.get('name'),
+                    printer_id: formData.get('printer_id'),
+                    cost: formData.get('cost'),
+                    vendor: formData.get('vendor'),
+                    yield: formData.get('yield'),
+                    quantity: formData.get('quantity')
+                };
+
+                fetch('/api/cartridges', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/';
+                })
+                .catch(error => {
+                    console.error('Error adding cartridge:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
