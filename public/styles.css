@@ -24,14 +24,14 @@ main {
 .section {
     flex: 1;
     margin: 0 1em;
-    max-height: 600px;
+    max-height: 100px;
     overflow-y: auto;
     border: 1px solid #ddd;
     padding: 1em;
 }
 
 .scrollable-content {
-    max-height: 400px;
+    max-height: 100px;
     overflow-y: auto;
 }
 
@@ -75,7 +75,7 @@ footer {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 90%;
+    width: 100%;
     margin: 20px auto;
 }
 
@@ -85,9 +85,9 @@ footer {
     border-radius: 4px;
     padding: 20px;
     margin: 10px;
-    width: 45%;
+    width: 100%;
     box-sizing: border-box;
-    max-height: 300px; /* Set a max height */
+    max-height: 600px; /* Set a max height */
     overflow-y: auto;  /* Enable vertical scrollbar */
 }
 

@@ -324,6 +324,129 @@ app.post('/api/issue-toner', (req, res) => {
     });
 });
 
+
+// Endpoint to update the quantity of a printer
+app.put('/api/printers/:id', (req, res) => {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    connection.query('UPDATE printers SET quantity = ? WHERE pid = ?', [quantity, id], (err, results) => {
+        if (err) {
+            console.error('Error updating quantity: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ message: 'Quantity updated successfully' });
+        }
+    });
+});
+
+
+// Endpoint to update the quantity of a cartridge
+app.put('/api/cartridges/:id', (req, res) => {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    connection.query('UPDATE cartridges SET quantity = ? WHERE cid = ?', [quantity, id], (err, results) => {
+        if (err) {
+            console.error('Error updating quantity: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ message: 'Quantity updated successfully' });
+        }
+    });
+});
+
+
+
+// Endpoint to fetch all printers
+app.get('/api/printers', (req, res) => {
+    connection.query('SELECT * FROM printers', (err, results) => {
+        if (err) {
+            console.error('Error fetching printers: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+});
+
+// Endpoint to add a new printer
+app.post('/api/printers', (req, res) => {
+    const { pname, cost, vendor, quantity, drum } = req.body;
+    const date = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+    connection.query('INSERT INTO printers (pname, cost, vendor, quantity, drum, date) VALUES (?, ?, ?, ?, ?, ?)', [pname, cost, vendor, quantity, drum, date], (err, results) => {
+        if (err) {
+            console.error('Error adding printer: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(201).json({ message: 'Printer added successfully' });
+        }
+    });
+});
+
+// Endpoint to update the quantity of a printer
+app.put('/api/printers/:id', (req, res) => {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    connection.query('UPDATE printers SET quantity = ? WHERE pid = ?', [quantity, id], (err, results) => {
+        if (err) {
+            console.error('Error updating printer quantity: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ message: 'Printer quantity updated successfully' });
+        }
+    });
+});
+
+// Endpoint to fetch all cartridges with printer names
+app.get('/api/cartridges', (req, res) => {
+    const query = `
+        SELECT c.cid, c.name AS cartridge_name, c.cost, c.vendor, c.yield, c.quantity, c.date, p.pname AS printer_name 
+        FROM cartridges c
+        JOIN printers p ON c.printer_id = p.pid
+    `;
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error fetching cartridges: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json(results);
+        }
+    });
+});
+
+// Endpoint to add a new cartridge
+app.post('/api/cartridges', (req, res) => {
+    const { name, printer_id, cost, vendor, yield, quantity } = req.body;
+    const date = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+    connection.query('INSERT INTO cartridges (name, printer_id, cost, vendor, yield, quantity, date) VALUES (?, ?, ?, ?, ?, ?, ?)', [name, printer_id, cost, vendor, yield, quantity, date], (err, results) => {
+        if (err) {
+            console.error('Error adding cartridge: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(201).json({ message: 'Cartridge added successfully' });
+        }
+    });
+});
+
+// Endpoint to update the quantity of a cartridge
+app.put('/api/cartridges/:id', (req, res) => {
+    const { id } = req.params;
+    const { quantity } = req.body;
+
+    connection.query('UPDATE cartridges SET quantity = ? WHERE cid = ?', [quantity, id], (err, results) => {
+        if (err) {
+            console.error('Error updating cartridge quantity: ' + err.stack);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            res.status(200).json({ message: 'Cartridge quantity updated successfully' });
+        }
+    });
+});
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

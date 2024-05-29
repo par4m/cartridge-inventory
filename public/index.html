@@ -39,12 +39,13 @@
                 <form id="issue-toner-form">
                     <label for="empid">Employee ID:</label>
                     <input type="text" id="empid" name="empid" required>
+                    <br>
                     <label for="empname">Employee Name:</label>
-                    <input type="text" id="empname" name="empname" required>
+                    <input type="text" id="empname" name="empname" required> <br>
                     <label for="cid">Cartridge:</label>
-                    <select id="cid" name="cid" required></select>
+                    <select id="cid" name="cid" required></select> <br>
                     <label for="quantity">Quantity:</label>
-                    <select id="quantity" name="quantity" required></select>
+                    <select id="quantity" name="quantity" required></select> <br>
                     <button type="submit">Issue Toner</button>
                 </form>
             </section>
@@ -77,7 +78,9 @@
                                 <p>Name: ${printer.pname}</p>
                                 <p>Cost: ${printer.cost}</p>
                                 <p>Vendor: ${printer.vendor}</p>
-                                <p>Quantity: ${printer.quantity} <button onclick="updatePrinterQuantity(${printer.pid}, ${printer.quantity + 1})">+</button> <button onclick="updatePrinterQuantity(${printer.pid}, ${printer.quantity - 1})">-</button></p>
+                                <p>Quantity: ${printer.quantity} </p>
+
+
                                 <p>Drum: ${printer.drum}</p>
                                 <p>Date: ${printer.date}</p>
                             `;
@@ -105,7 +108,7 @@
                                 <p>Cost: ${cartridge.cost}</p>
                                 <p>Vendor: ${cartridge.vendor}</p>
                                 <p>Yield: ${cartridge.yield}</p>
-                                <p>Quantity: ${cartridge.quantity} <button onclick="updateCartridgeQuantity(${cartridge.cid}, ${cartridge.quantity + 1})">+</button> <button onclick="updateCartridgeQuantity(${cartridge.cid}, ${cartridge.quantity - 1})">-</button></p>
+                                <p>Quantity: ${cartridge.quantity}</p>
                                 <p>Date: ${cartridge.date}</p>
                             `;
                             cartridgesList.appendChild(cartridgeItem);
@@ -153,7 +156,7 @@
 
             function fetchAndDisplayCartridgeReceipts() {
                 fetch('/api/receipts')
-                    .then(response => response.json())
+                    .then(response => response.jjjjjjjjjjson())
                     .then(data => {
                         const cartridgeReceiptsList = document.getElementById('cartridge-receipts-list');
                         cartridgeReceiptsList.innerHTML = '';
@@ -163,7 +166,7 @@
                                 <p>ID: ${receipt.rid}</p>
                                 <p>Cartridge: ${receipt.cartridge_name}</p>
                                 <p>Cost: ${receipt.cost}</p>
-                                <p>Quantity: ${receipt.quantity}</p>
+                                <p>                                Quantity: ${receipt.quantity}</p>
                                 <p>Date: ${receipt.date}</p>
                             `;
                             cartridgeReceiptsList.appendChild(receiptItem);
@@ -269,4 +272,3 @@
     </script>
 </body>
 </html>
-
