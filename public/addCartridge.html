@@ -1,45 +1,125 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Cartridge</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Fonts from Google Font */
+        @import url('https://fonts.googleapis.com/css?family=Abel|Merriweather');
+        
+        /* Global rules */
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ddd;
+            color: #ddd;
+            font-family: 'Abel', sans-serif;
+        }
+
+        form {
+            width: 450px;
+            min-height: 500px;
+            height: auto;
+            border-radius: 5px;
+            margin: 2% auto;
+            box-shadow: 0 9px 50px rgba(0, 0, 0, 0.5);
+            padding: 2%;
+            background-color: #444;
+        }
+
+        .con {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 0 auto;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 240px;
+            height: 50px;
+            margin-top: 2%;
+            padding: 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #555;
+            border: none;
+            border-radius: 5px;
+            transition: 0.2s linear;
+        }
+
+        input[id="name"] { 
+            width: 250px; 
+        }
+
+        input:focus, select:focus {
+            transform: translateX(-2px);
+            background-color: #666;
+        }
+
+        button {
+            display: inline-block;
+            color: #fff;
+            width: 280px;
+            height: 50px;
+            padding: 0 20px;
+            background: #555;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            margin: 7% auto;
+            letter-spacing: 0.05em;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Add New Cartridge</h1>
-    </header>
-    
-    <main>
-        <form id="add-cartridge-form">
-            <label for="name">Cartridge Name:</label>
+    <div class="container">
+        <form id="add-cartridge-form" action="/api/add-cartridge" method="POST">
+            <label for="name">Cartridge Name</label>
             <input type="text" id="name" name="name" required>
             
-            <label for="printer-id">Printer:</label>
+            <label for="printer-id">Printer</label>
             <select id="printer-id" name="printer_id" required>
                 <!-- Printer options will be populated here -->
             </select>
             
-            <label for="cost">Cost:</label>
-            <input type="number" id="cost" name="cost" step="0.01" required>
+            <label for="cost">Cost</label>
+            <input type="number" id="cost" name="cost"  required>
             
-            <label for="vendor">Vendor:</label>
+            <label for="vendor">Vendor</label>
             <input type="text" id="vendor" name="vendor" required>
             
-            <label for="yield">Yield:</label>
+            <label for="yield">Yield</label>
             <input type="number" id="yield" name="yield" required>
             
-            <label for="quantity">Quantity:</label>
+            <label for="quantity">Quantity</label>
             <input type="number" id="quantity" name="quantity" required>
             
             <button type="submit">Add Cartridge</button>
         </form>
-    </main>
-    
-    <footer>
-        <p>&copy; 2024</p>
-    </footer>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -49,8 +129,8 @@
                     const printerSelect = document.getElementById('printer-id');
                     data.forEach(printer => {
                         const option = document.createElement('option');
-                        option.value = printer.pid;
-                        option.text = printer.pname;
+                        option.value = printer.pid; // Set the value to the printer ID
+                        option.text = printer.pname; // Set the text to the printer name
                         printerSelect.appendChild(option);
                     });
                 })
@@ -64,14 +144,14 @@
                 const formData = new FormData(this);
                 const data = {
                     name: formData.get('name'),
-                    printer_id: formData.get('printer_id'),
+                    printer_id: formData.get('printer_id'), // Get the selected printer ID
                     cost: formData.get('cost'),
                     vendor: formData.get('vendor'),
                     yield: formData.get('yield'),
                     quantity: formData.get('quantity')
                 };
 
-                fetch('/api/cartridges', {
+                fetch('/api/add-cartridge', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -81,7 +161,7 @@
                 .then(response => response.json())
                 .then(data => {
                     alert(data.message);
-                    window.location.href = '/';
+                    window.location.href = '/cartridge.html';
                 })
                 .catch(error => {
                     console.error('Error adding cartridge:', error);
@@ -91,4 +171,3 @@
     </script>
 </body>
 </html>
-

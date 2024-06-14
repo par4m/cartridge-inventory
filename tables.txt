@@ -1,4 +1,0 @@
- CREATE TABLE employee (     empno INT PRIMARY KEY,     empname VARCHAR(32) NOT NULL,     gender CHAR(1) CHECK(gender IN ('M', 'F')) NOT NULL,     salary NUMERIC(8, 3) NOT NULL,     address VARCHAR(32) NOT NULL,     dno INT,     FOREIGN KEY (dno) REFERENCES department(deptno) );
-
-
-

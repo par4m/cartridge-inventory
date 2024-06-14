@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cartridges</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://kit.fontawesome.com/f8c32451ce.js" crossorigin="anonymous"></script>
+
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.2/sql-wasm.js"></script>
+
+        <script type="module" defer src="./js/main.js"></script>
+
+
+
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+    <link rel="manifest" href="./favicon/site.webmanifest">
+    <link rel="mask-icon" href="./favicon/safari-pinned-tab.svg" color="#0d86e1">
+    <link rel="shortcut icon" href="./favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="./favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+    <header>
+        <div id="search-bar">
+            <i class="fas fa-search"></i>
+            <form accept="#" method="get">
+                <input type="search" name="search" maxlength="100" required>
+                <button type="submit" hidden aria-label="search"></button>
+            </form>
+        </div>
+        <div id="user-btns">
+            <a href="" id="notification-icon" aria-label="notifications">
+                <i class="far fa-bell"></i>
+            </a>
+            <div id="user-icon">
+                <img 
+                    src="https://toddbrentlinger.github.io/odin-project/intermediate-html-and-css/grid/project-admin-dashboard/favicon/android-chrome-192x192.png"
+                    alt="Project Admin Dashboard icon"
+                >
+            </div>
+            <div id="user-name"></div>
+        </div>
+        <div id="user-info">
+            <div id="user-info-icon">
+                <img 
+                    src="https://toddbrentlinger.github.io/odin-project/intermediate-html-and-css/grid/project-admin-dashboard/favicon/android-chrome-192x192.png"
+                    alt="Project Admin Dashboard icon"
+                >
+            </div>
+            <div id="user-details">
+                <div id="user-details-message">Hi there,</div>
+                <div id="user-details-name">Admin</div>
+            </div>
+        </div>
+        <div id="header-btns">
+            <a href=""><span>Issue</span></a>
+            <a href="addCartridge.html"><span>Buy</span></a>
+        </div>
+    </header>
+
+    <nav id="side-bar">
+        <div id="branding">
+            <div>
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </div>
+        </div>
+
+        <div id="nav-1">
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="printers.html">
+                <i class="far fa-address-card"></i>
+                <span>Printers</span>
+            </a>
+            <a href="cartridge.html">
+                <i class="fas fa-comment-alt"></i>
+                <span>Cartridge</span>
+            </a>
+            <a href="">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="">
+                <i class="far fa-copy"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="">
+                <i class="fas fa-users"></i>
+                <span>Communities</span>
+            </a>
+        </div>
+
+        <div id="nav-2">
+            <a href="">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="">
+                <i class="fas fa-question-circle"></i>
+                <span>Support</span>
+            </a>
+            <a href="">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy</span>
+            </a>
+        </div>
+    </nav>
+
+   <main class="cartridge">
+        <div id="cartridges-section">
+            <h2>Cartridges</h2>
+            <div id="cartridges-container">
+                <div id="cartridges">
+                    <!-- Cartridges will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+   </main>   <!--
+        - Favicon by OpenClipArt from https://freesvg.org/android-contacts-icon
+    -->
+
+
+</body>
+</html>

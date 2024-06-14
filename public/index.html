@@ -1,274 +1,149 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cartridge Management Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Cartridge Dashboard</title>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="font/f8c32451ce.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+
+
+
+<script src="js/main.js"></script>
+
+
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+    <link rel="manifest" href="./favicon/site.webmanifest">
+    <link rel="mask-icon" href="./favicon/safari-pinned-tab.svg" color="#0d86e1">
+    <link rel="shortcut icon" href="./favicon/favicon.ico">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-config" content="./favicon/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body>
     <header>
-        <h1>Cartridge Management Dashboard</h1>
+        <div id="search-bar">
+            <i class="fas fa-search"></i>
+            <form accept="#" method="get">
+                <input type="search" name="search" maxlength="100" required>
+                <button type="submit" hidden aria-label="search"></button>
+            </form>
+        </div>
+        <div id="user-btns">
+            <a href="" id="notification-icon" aria-label="notifications">
+                <i class="far fa-bell"></i>
+            </a>
+            <div id="user-icon">
+                <img 
+                    src="https://toddbrentlinger.github.io/odin-project/intermediate-html-and-css/grid/project-admin-dashboard/favicon/android-chrome-192x192.png"
+                    alt="Project Admin Dashboard icon"
+                >
+            </div>
+            <div id="user-name"></div>
+        </div>
+        <div id="user-info">
+            <div id="user-info-icon">
+                <img 
+                    src="https://toddbrentlinger.github.io/odin-project/intermediate-html-and-css/grid/project-admin-dashboard/favicon/android-chrome-192x192.png"
+                    alt="Project Admin Dashboard icon"
+                >
+            </div>
+            <div id="user-details">
+                <div id="user-details-message">Hi there,</div>
+                <div id="user-details-name">Admin</div>
+            </div>
+        </div>
+        <div id="header-btns">
+            <a href=""><span>Issue</span></a>
+            <a href=""><span>Buy</span></a>
+            <a href=""><span>Export</span></a>
+        </div>
     </header>
 
-    <main>
-        <div class="container">
-            <section class="section" id="printers-section">
-                <h2>Printers</h2>
-                <ul id="printers-list"></ul>
-                <button onclick="window.location.href='/addPrinter.html'">Add Printer</button>
-                <button onclick="window.location.href='/addPrinterReceipt.html'">Purchase Printer</button>
-            </section>
-            <section class="section" id="cartridges-section">
-                <h2>Cartridges</h2>
-                <ul id="cartridges-list"></ul>
-                <button onclick="window.location.href='/addCartridge.html'">Add Cartridge</button>
-                <button onclick="window.location.href='/addReceipt.html'">Purchase Toner</button>
-            </section>
-            <section class="section" id="receipts-section">
-                <h2>Receipts</h2>
-                <h3>Printer Receipts</h3>
-                <ul id="printer-receipts-list"></ul>
-                <h3>Cartridge Receipts</h3>
-                <ul id="cartridge-receipts-list"></ul>
-                <h3>Issued Toners</h3>
-                <ul id="issued-toners-list"></ul>
-            </section>
-            <section class="section" id="issue-toner-section">
-                <h2>Issue Toner</h2>
-                <form id="issue-toner-form">
-                    <label for="empid">Employee ID:</label>
-                    <input type="text" id="empid" name="empid" required>
-                    <br>
-                    <label for="empname">Employee Name:</label>
-                    <input type="text" id="empname" name="empname" required><br>
-                    <label for="cid">Cartridge:</label>
-                    <select id="cid" name="cid" required></select>
-                    <label for="quantity">Quantity:</label>
-                    <select id="quantity" name="quantity" required></select>
-                    <button type="submit">Issue Toner</button>
-                </form>
-            </section>
+    <nav id="side-bar">
+        <div id="branding">
+            <div>
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </div>
         </div>
+
+        <div id="nav-1">
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a href="printers.html">
+                <i class="far fa-address-card"></i>
+                <span>Printers</span>
+            </a>
+            <a href="cartridge.html">
+                <i class="fas fa-comment-alt"></i>
+                <span>Cartridge</span>
+            </a>
+            <a href="">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+            <a href="">
+                <i class="far fa-copy"></i>
+                <span>Tasks</span>
+            </a>
+            <a href="">
+                <i class="fas fa-users"></i>
+                <span>Communities</span>
+            </a>
+        </div>
+
+        <div id="nav-2">
+            <a href="">
+                <i class="fas fa-cog"></i>
+                <span>Settings</span>
+            </a>
+            <a href="">
+                <i class="fas fa-question-circle"></i>
+                <span>Support</span>
+            </a>
+            <a href="">
+                <i class="fas fa-shield-alt"></i>
+                <span>Privacy</span>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Empty space for specific page content -->
+        <div id="announcements-section">
+            <h2>Cartridge Issued</h2>
+            <div id="announcements"></div>
+        </div>
+
+        <div id="trending-section">
+            <h2>Cartridge Purchased</h2>
+            <div id="trending"></div>
+        </div>
+    <div id="pages-used-section">
+        <h2>Pages Used per Department</h2>
+        <div class="dashboard-content">
+            <div id="pages-used-table">
+                <!-- Table for Pages Used per Department -->
+            </div>
+            <div id="pie-chart"></div>
+        </div>
+    </div>
+    <div class="employee-used-section"></div>
+    </div>
+
     </main>
 
-    <footer>
-        <p>&copy; 2024</p>
-    </footer>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            fetchAndDisplayPrinters();
-            fetchAndDisplayCartridges();
-            fetchAndDisplayPrinterReceipts();
-            fetchAndDisplayCartridgeReceipts();
-            fetchAndDisplayIssuedToners();
-            
-            document.getElementById('issue-toner-form').addEventListener('submit', issueToner);
-
-            function fetchAndDisplayPrinters() {
-                fetch('/api/printers')
-                    .then(response => response.json())
-                    .then(data => {
-                        const printersList = document.getElementById('printers-list');
-                        printersList.innerHTML = '';
-                        data.forEach(printer => {
-                            const printerItem = document.createElement('li');
-                            printerItem.innerHTML = `
-                                <p>Name: ${printer.pname}</p>
-                                <p>Cost: ${printer.cost}</p>
-                                <p>Vendor: ${printer.vendor}</p>
-                                <p>Quantity: ${printer.quantity} </p>
-
-
-                                <p>Drum: ${printer.drum}</p>
-                                <p>Date: ${printer.date}</p>
-                            `;
-                            printersList.appendChild(printerItem);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching printers:', error);
-                    });
-            }
-
-            function fetchAndDisplayCartridges() {
-                fetch('/api/cartridges')
-                    .then(response => response.json())
-                    .then(data => {
-                        const cartridgesList = document.getElementById('cartridges-list');
-                        const cidSelect = document.getElementById('cid');
-                        cartridgesList.innerHTML = '';
-                        cidSelect.innerHTML = '';
-                        data.forEach(cartridge => {
-                            const cartridgeItem = document.createElement('li');
-                            cartridgeItem.innerHTML = `
-                                <p>Name: ${cartridge.cartridge_name}</p>
-                                <p>Printer: ${cartridge.printer_name}</p>
-                                <p>Cost: ${cartridge.cost}</p>
-                                <p>Vendor: ${cartridge.vendor}</p>
-                                <p>Yield: ${cartridge.yield}</p>
-                                <p>Quantity: ${cartridge.quantity}</p>
-                                <p>Date: ${cartridge.date}</p>
-                            `;
-                            cartridgesList.appendChild(cartridgeItem);
-
-                            const option = document.createElement('option');
-                            option.value = cartridge.cid;
-                            option.textContent = cartridge.cartridge_name;
-                            cidSelect.appendChild(option);
-                        });
-
-                        cidSelect.addEventListener('change', function() {
-                            const selectedCartridge = data.find(cartridge => cartridge.cid == cidSelect.value);
-                            updateQuantityDropdown(selectedCartridge ? selectedCartridge.quantity : 0);
-                        });
-
-                        updateQuantityDropdown(data[0] ? data[0].quantity : 0);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching cartridges:', error);
-                    });
-            }
-
-            function fetchAndDisplayPrinterReceipts() {
-                fetch('/api/printer-receipts')
-                    .then(response => response.json())
-                    .then(data => {
-                        const printerReceiptsList = document.getElementById('printer-receipts-list');
-                        printerReceiptsList.innerHTML = '';
-                        data.forEach(receipt => {
-                            const receiptItem = document.createElement('li');
-                            receiptItem.innerHTML = `
-                                <p>ID: ${receipt.rid}</p>
-                                <p>Printer: ${receipt.printer_name}</p>
-                                <p>Cost: ${receipt.cost}</p>
-                                <p>Quantity: ${receipt.quantity}</p>
-                                <p>Date: ${receipt.date}</p>
-                            `;
-                            printerReceiptsList.appendChild(receiptItem);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching printer receipts:', error);
-                    });
-            }
-
-            function fetchAndDisplayCartridgeReceipts() {
-                fetch('/api/receipts')
-                    .then(response => response.jjjjjjjjjjson())
-                    .then(data => {
-                        const cartridgeReceiptsList = document.getElementById('cartridge-receipts-list');
-                        cartridgeReceiptsList.innerHTML = '';
-                        data.forEach(receipt => {
-                            const receiptItem = document.createElement('li');
-                            receiptItem.innerHTML = `
-                                <p>ID: ${receipt.rid}</p>
-                                <p>Cartridge: ${receipt.cartridge_name}</p>
-                                <p>Cost: ${receipt.cost}</p>
-                                <p>                                Quantity: ${receipt.quantity}</p>
-                                <p>Date: ${receipt.date}</p>
-                            `;
-                            cartridgeReceiptsList.appendChild(receiptItem);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching cartridge receipts:', error);
-                    });
-            }
-
-            function fetchAndDisplayIssuedToners() {
-                fetch('/api/issued-toners')
-                    .then(response => response.json())
-                    .then(data => {
-                        const issuedTonersList = document.getElementById('issued-toners-list');
-                        issuedTonersList.innerHTML = '';
-                        data.forEach(issue => {
-                            const issueItem = document.createElement('li');
-                            issueItem.innerHTML = `
-                                <p>Employee ID: ${issue.empid}</p>
-                                <p>Employee Name: ${issue.empname}</p>
-                                <p>Cartridge: ${issue.cartridge_name}</p>
-                                <p>Quantity: ${issue.quantity}</p>
-                                <p>Date: ${issue.date}</p>
-                            `;
-                            issuedTonersList.appendChild(issueItem);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error fetching issued toners:', error);
-                    });
-            }
-
-            function issueToner(event) {
-                event.preventDefault();
-                const empid = document.getElementById('empid').value;
-                const empname = document.getElementById('empname').value;
-                const cid = document.getElementById('cid').value;
-                const quantity = document.getElementById('quantity').value;
-
-                fetch('/api/issue-toner', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ empid, empname, cid, quantity })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    fetchAndDisplayCartridges();
-                    fetchAndDisplayIssuedToners();
-                })
-                .catch(error => {
-                    console.error('Error issuing toner:', error);
-                });
-            }
-
-            function updatePrinterQuantity(id, newQuantity) {
-                fetch(`/api/printers/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ quantity: newQuantity })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    fetchAndDisplayPrinters();
-                })
-                .catch(error => {
-                    console.error('Error updating printer quantity:', error);
-                });
-            }
-
-            function updateCartridgeQuantity(id, newQuantity) {
-                fetch(`/api/cartridges/${id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ quantity: newQuantity })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    fetchAndDisplayCartridges();
-                })
-                .catch(error => {
-                    console.error('Error updating cartridge quantity:', error);
-                });
-            }
-
-            function updateQuantityDropdown(maxQuantity) {
-                const quantitySelect = document.getElementById('quantity');
-                quantitySelect.innerHTML = '';
-                for (let i = 1; i <= maxQuantity; i++) {
-                    const option = document.createElement('option');
-                    option.value = i;
-                    option.textContent = i;
-                    quantitySelect.appendChild(option);
-                }
-            }
-        });
-    </script>
 </body>
-</html>
+</html> 
