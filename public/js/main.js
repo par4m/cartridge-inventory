@@ -9,39 +9,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const [issuedData, purchasedData, printerData, cartridgeData, employeeData] = await Promise.all(responses.map(res => res.json()));
 
-    const announcementsSection = document.getElementById('announcements');
-    if (announcementsSection) {
-        announcementsSection.innerHTML = issuedData.map(({ empid, empname, cid, quantity, date, department }) => `
-            <div class="announcement">
-                <h3>${empname}</h3>
-                <p>Employee ID: ${empid}</p>
-                <p>Cartridge ID: ${cid}</p>
-                <p>Quantity: ${quantity}</p>
-                <p>Date: ${date}</p>
-                <p>Department: ${department}</p>
-            </div>
-        `).join('');
-    } else {
-        console.error('Element with ID "announcements" not found.');
-    }
-
-    const trendingSection = document.getElementById('trending');
-    if (trendingSection) {
-        trendingSection.innerHTML = purchasedData.map(({ rid, cid, receipt_name, cost, quantity, date }) => `
-            <div class="trending-item">
-                <div class="trending-item-info">
-                    <div class="trending-item-username">Name: ${receipt_name}</div>
-                    <div class="trending-item-title">Cartridge ID: ${cid}</div>
-                    <p>Cost: ${cost}</p>
+          // Section 1: Announcements (Issued Cartridges)
+        const announcementsSection = document.getElementById('announcements');
+        if (announcementsSection) {
+            announcementsSection.innerHTML = issuedData.map(({ empid, empname, cid, quantity, date, department }) => `
+                <div class="announcement">
+                    <h3>${empname}</h3>
+                    <p>Employee ID: ${empid}</p>
+                    <p>Cartridge ID: ${cid}</p>
                     <p>Quantity: ${quantity}</p>
                     <p>Date: ${date}</p>
+                    <p>Department: ${department}</p>
                 </div>
-            </div>
-        `).join('');
-    } else {
-        console.error('Element with ID "trending" not found.');
-    }
-    
+            `).join('');
+        } else {
+            console.error('Element with ID "announcements" not found.');
+        }
+
+
+ // Section 2: Trending (Purchased Cartridges)
+        const trendingSection = document.getElementById('trending');
+        if (trendingSection) {
+            trendingSection.innerHTML = purchasedData.map(({ rid, cid, receipt_name, cost, quantity, date }) => `
+                <div class="trending-item">
+                    <div class="trending-item-info">
+                        <div class="trending-item-username">Name: ${receipt_name}</div>
+                        <div class="trending-item-title">Cartridge ID: ${cid}</div>
+                        <p>Cost: ${cost}</p>
+                        <p>Quantity: ${quantity}</p>
+                        <p>Date: ${date}</p>
+                    </div>
+                </div>
+            `).join('');
+        } else {
+            console.error('Element with ID "trending" not found.');
+        }  
+
     const projectsSection = document.getElementById('projects');
     if (projectsSection) {
         projectsSection.innerHTML = printerData.map(({ pid, pname, cost, vendor, quantity, drum, date }) => `
@@ -117,55 +120,52 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Element with ID "add-cartridge-form" not found.');
     }
 
+     // Section 3: Pages Used per Department
+        const pagesUsedTable = document.getElementById('pages-used-table');
+        if (pagesUsedTable) {
+            const pagesUsedPerDepartment = {};
 
-
-    const tableContainer = document.getElementById('pages-used-table');
-    if (tableContainer) {
-        const pagesUsedPerDepartment = {};
-
-        employeeData.forEach(employee => {
-            const cartridge = cartridgeData.find(c => c.cid === employee.cid);
-            if (cartridge) {
-                const pagesUsed = employee.quantity * cartridge.pageYield;
-                if (pagesUsedPerDepartment[employee.department]) {
-                    pagesUsedPerDepartment[employee.department] += pagesUsed;
-                } else {
-                    pagesUsedPerDepartment[employee.department] = pagesUsed;
+            issuedData.forEach(issue => {
+                const cartridge = cartridgeData.find(c => c.cid === issue.cid);
+                if (cartridge) {
+                    const pagesUsed = issue.quantity * cartridge.pageYield;
+                    if (pagesUsedPerDepartment[issue.department]) {
+                        pagesUsedPerDepartment[issue.department] += pagesUsed;
+                    } else {
+                        pagesUsedPerDepartment[issue.department] = pagesUsed;
+                    }
                 }
-            }
-        });
+            });
+ const tableHTML = Object.keys(pagesUsedPerDepartment).map(department => `
+                <tr>
+                    <td>${department}</td>
+                    <td>${pagesUsedPerDepartment[department]}</td>
+                </tr>
+            `).join('');
 
-        const tableHTML = Object.keys(pagesUsedPerDepartment).map(department => `
-            <tr>
-                <td>${department}</td>
-                <td>${pagesUsedPerDepartment[department]}</td>
-            </tr>
-        `).join('');
+            pagesUsedTable.innerHTML = `
+                <table class="styled-table">
+                    <thead>
+                        <tr class="active-row">
+                            <th>Department</th>
+                            <th>Pages Used</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${tableHTML}
+                    </tbody>
+                </table>
+            `;
 
-        tableContainer.innerHTML = `
-            <table class="styled-table">
-                <thead>
-                    <tr class="active-row">
-                        <th>Department</th>
-                        <th>Pages Used</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${tableHTML}
-                </tbody>
-            </table>
-        `;
-
-        // Prepare data for pie chart
-        const departments = Object.keys(pagesUsedPerDepartment);
-        const pieData = departments.map(department => ({
-            department: department,
-            pagesUsed: pagesUsedPerDepartment[department]
-        }));
-
-        // D3.js pie chart setup
-        const width = 200;
-        const height = 200;
+            // D3.js pie chart setup
+            const departments = Object.keys(pagesUsedPerDepartment);
+            const pieData = departments.map(department => ({
+                department: department,
+                pagesUsed: pagesUsedPerDepartment[department]
+            }));
+          // D3.js pie chart setup
+        const width = 300;
+        const height = 300;
         const radius = Math.min(width, height) / 2;
 
         const color = d3.scaleOrdinal()
@@ -175,6 +175,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         const arc = d3.arc()
             .outerRadius(radius - 10)
             .innerRadius(0);
+
+        const labelArc = d3.arc()
+            .outerRadius(radius - 40)
+            .innerRadius(radius - 40);
 
         const pie = d3.pie()
             .sort(null)
@@ -194,7 +198,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         g.append("path")
             .attr("d", arc)
-            .style("fill", (d, i) => color(d.data.department));
+            .style("fill", d => color(d.data.department));
+
+        g.append("text")
+            .attr("transform", d => `translate(${labelArc.centroid(d)})`)
+            .attr("dy", ".35em")
+            .text(d => d.data.department.charAt(0)); // Display only the first letter
 
         // Optional: Add legend
         const legend = svg.selectAll(".legend")
@@ -220,54 +229,103 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Element with ID "pages-used-table" not found.');
     }
 
-    // Prepare data for employees with most pages printed
+    // Prepare data for top employees in each department
     const pagesUsedPerEmployee = {};
 
     employeeData.forEach(employee => {
         const cartridge = cartridgeData.find(c => c.cid === employee.cid);
         if (cartridge) {
             const pagesUsed = employee.quantity * cartridge.pageYield;
-            pagesUsedPerEmployee[employee.empname] = pagesUsed;
+            if (!pagesUsedPerEmployee[employee.department]) {
+                pagesUsedPerEmployee[employee.department] = [];
+            }
+            pagesUsedPerEmployee[employee.department].push({
+                name: employee.empname,
+                pagesUsed: pagesUsed,
+                department: employee.department
+            });
         }
     });
 
-    // Sort employees based on pages printed (descending order)
-    const sortedEmployees = Object.keys(pagesUsedPerEmployee).sort((a, b) => pagesUsedPerEmployee[b] - pagesUsedPerEmployee[a]);
 
-    // Build HTML for the table
-    const tHTML = sortedEmployees.map(employee => `
-        <tr>
-            <td>${employee}</td>
-            <td>${pagesUsedPerEmployee[employee]}</td>
-            <td>${employeeData.find(e => e.empname === employee).department}</td>
-        </tr>
-    `).join('');
 
-    // Create table element and append to tContainer
-    const tableElement = document.createElement('table');
-    tableElement.classList.add('styled-table');
-    tableElement.innerHTML = `
-        <thead>
-            <tr class="active-row">
-                <th>Name</th>
-                <th>Pages Printed</th>
-                <th>Department</th>
-            </tr>
-        </thead>
-        <tbody>
-            ${tHTML}
-        </tbody>
-    `;
+    try {
+        // Fetch data from API
+        const response = await fetch('/api/employee');
+        const employeeData = await response.json();
 
-    // Append table to DOM
-    const employeeUsedSection = document.querySelector('.employee-used-section'); // Use class selector if ID is incorrect
-    if (employeeUsedSection) {
-        employeeUsedSection.innerHTML = ''; // Clear existing content
-        const tContainer = document.createElement('div');
-        tContainer.innerHTML = `<h2>Employees with Most Pages Printed</h2>`;
-        tContainer.appendChild(tableElement);
-        employeeUsedSection.appendChild(tContainer);
-    } else {
-        console.error('Element with class "employee-used-section" not found.');
-    }
+        const cartridgeResponse = await fetch('/api/cartridges');
+        const cartridgeData = await cartridgeResponse.json();
+          
+          // Aggregate data by empid
+                const pagesByEmployee = {};
+
+                issuedData.forEach(issue => {
+                    const cartridge = cartridgeData.find(c => c.cid === issue.cid);
+                    if (cartridge) {
+                        const pagesUsed = issue.quantity * cartridge.pageYield;
+                        if (!pagesByEmployee[issue.empid]) {
+                            pagesByEmployee[issue.empid] = {
+                                empid: issue.empid,
+                                empname: issue.empname,
+                                department: issue.department,
+                                total: 0,
+                                details: []
+                            };
+                        }
+                        pagesByEmployee[issue.empid].total += pagesUsed;
+                        pagesByEmployee[issue.empid].details.push({
+                            cid: issue.cid,
+                            quantity: issue.quantity,
+                            date: issue.date,
+                            pagesUsed: pagesUsed
+                        });
+                    }
+                });
+
+                // Generate HTML
+                const tableHTML = Object.values(pagesByEmployee).map(employee => `
+                    <tr>
+                        <td>${employee.empid}</td>
+                        <td>${employee.empname}</td>
+                        <td>${employee.department}</td>
+                        <td>
+                            ${employee.details.map(detail => `
+                                <div>
+                                    <span>Cartridge ID: ${detail.cid}</span><br>
+                                    <span>Quantity: ${detail.quantity}</span><br>
+                                    <span>Date: ${detail.date}</span><br>
+                                    <span>Pages Used: ${detail.pagesUsed}</span>
+                                </div>
+                            `).join('<br>')}
+                        </td>
+                        <td>${employee.total}</td>
+                    </tr>
+                `).join('');
+
+                const issuedTableContainer = document.getElementById('issued-table');
+                if (issuedTableContainer) {
+                    issuedTableContainer.innerHTML = `
+                        <table class="styled-table">
+                            <thead>
+                                <tr class="active-row">
+                                    <th>Emp ID</th>
+                                    <th>Name</th>
+                                    <th>Department</th>
+                                    <th>Cartridge Details</th>
+                                    <th>Total Pages</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${tableHTML}
+                            </tbody>
+                        </table>
+                    `;
+                } else {
+                    console.error('Element with ID "issued-table" not found.');
+                }
+            } catch (error) {
+                console.error('Error fetching or displaying data:', error);
+            }
+        
 });

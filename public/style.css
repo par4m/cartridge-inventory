@@ -714,12 +714,12 @@ gap: 0;
 
 /* Style for the table */
 .styled-table {
-    width: 45%;
+    width: 60%;
 }
 
 /* Style for the pie chart */
 #pie-chart {
     width: 40%;
-    height: auto;
+    height: 60%;
 }
 
