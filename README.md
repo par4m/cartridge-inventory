@@ -1,3 +1,12 @@
+![image](https://github.com/par4m/cartridge-inventory/assets/68808783/f0f08d65-3fb9-435f-acae-5b16931d9bc5)
+![image](https://github.com/par4m/cartridge-inventory/assets/68808783/3eddb1a5-92f6-4d49-8d01-02146e6878e9)
+![image](https://github.com/par4m/cartridge-inventory/assets/68808783/b02f203e-748d-404a-b7ff-28b51be81709)
+![image](https://github.com/par4m/cartridge-inventory/assets/68808783/e3bc675d-2204-460e-a2e0-be33d6b4b8ff)
+![image](https://github.com/par4m/cartridge-inventory/assets/68808783/e62c4e1e-dc3c-48be-be46-b213dd8188df)
+![image](https://github.com/par4m/cartridge-inventory/assets/68808783/e3b75816-d2ec-4fad-8e79-5dbf5f2f3aa7)
+
+
+
 
 
 The Cartridge Dashboard is a web-based application designed to manage and track the usage, issuance, and purchase of printer cartridges within an organization. It provides an easy-to-navigate interface to view different aspects of cartridge management, including announcements, trending data, and detailed statistics on pages used per department.
