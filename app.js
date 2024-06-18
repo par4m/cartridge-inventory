@@ -104,6 +104,61 @@ let db;
     }
 });
 
+app.get('/api/employee/:empid', async (req, res) => {
+        const empid = req.params.empid;
+        try {
+            const employee = await db.get('SELECT * FROM employee WHERE empid = ?', [empid]);
+            if (employee) {
+                res.json(employee);
+            } else {
+                res.status(404).json({ error: 'Employee not found' });
+            }
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    });
+
+    app.post('/api/issue-cartridge', async (req, res) => {
+        try {
+            const { empid, empname, cid, quantity, department } = req.body;
+
+            // Insert new entry in the employee table
+            const query = `
+                INSERT INTO employee (empid, empname, cid, quantity, date, department)
+                VALUES (?, ?, ?, ?, datetime('now'), ?)
+            `;
+            await db.run(query, [empid, empname, cid, quantity, department]);
+
+            // Update the cartridge quantity in the cartridges table
+            const existingCartridge = await db.get('SELECT * FROM cartridges WHERE cid = ?', [cid]);
+            if (existingCartridge) {
+                const newQuantity = existingCartridge.quantity - quantity;
+                await db.run('UPDATE cartridges SET quantity = ? WHERE cid = ?', [newQuantity, cid]);
+                res.json({ message: 'Cartridge issued successfully' });
+            } else {
+                res.status(400).json({ error: 'Cartridge not found' });
+            }
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    });
+
+    app.get('/api/cartridge/:cartridgeId', async (req, res) => {
+    const cartridgeId = req.params.cartridgeId; // Access the dynamic parameter
+    try {
+        // Query the database or perform any necessary operations based on cartridgeId
+        const cartridge = await db.get('SELECT * FROM cartridges WHERE cid = ?', [cartridgeId]);
+        if (cartridge) {
+            res.json(cartridge); // Return the cartridge data as JSON
+        } else {
+            res.status(404).json({ error: 'Cartridge not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {

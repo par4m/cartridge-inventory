@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Issue Cartridge</title>
+    <style>
+        /* Fonts from Google Font */
+        @import url('https://fonts.googleapis.com/css?family=Abel|Merriweather');
+        
+        /* Global rules */
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #ddd;
+            color: #ddd;
+            font-family: 'Abel', sans-serif;
+        }
+
+        form {
+            width: 450px;
+            min-height: 500px;
+            height: auto;
+            border-radius: 5px;
+            margin: 2% auto;
+            box-shadow: 0 9px 50px rgba(0, 0, 0, 0.5);
+            padding: 2%;
+            background-color: #444;
+        }
+
+        .con {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 0 auto;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select {
+            width: 240px;
+            height: 50px;
+            margin-top: 2%;
+            padding: 15px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #555;
+            border: none;
+            border-radius: 5px;
+            transition: 0.2s linear;
+        }
+
+        input:focus, select:focus {
+            transform: translateX(-2px);
+            background-color: #666;
+        }
+
+        button {
+            display: inline-block;
+            color: #fff;
+            width: 280px;
+            height: 50px;
+            padding: 0 20px;
+            background: #555;
+            border-radius: 5px;
+            outline: none;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s linear;
+            margin: 7% auto;
+            letter-spacing: 0.05em;
+        }
+
+        button:hover {
+            background-color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form id="issue-cartridge-form" action="/api/issue-cartridge" method="POST">
+            <label for="empid">Employee ID</label>
+            <input type="number" id="empid" name="empid" required>
+
+            <label for="empname">Employee Name</label>
+            <input type="text" id="empname" name="empname" required>
+
+            <label for="department">Department</label>
+            <select id="department" name="department" required>
+                <option value="Sales">Sales</option>
+                <option value="Marketing">Marketing</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+            </select>
+
+            <label for="cartridge-id">Cartridge</label>
+            <select id="cartridge-id" name="cartridge_id" required>
+                <!-- Cartridge options will be populated here -->
+            </select>
+            
+            <label for="quantity">Quantity</label>
+            <select id="quantity" name="quantity" required>
+                <!-- Quantity options will be dynamically populated -->
+            </select>
+            
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date" required>
+            
+            <button type="submit">Issue Cartridge</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fetch cartridges data and populate cartridge select options
+            fetch('/api/cartridges')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Cartridge data:', data);
+                    const cartridgeSelect = document.getElementById('cartridge-id');
+                    data.forEach(cartridge => {
+                        const option = document.createElement('option');
+                        option.value = cartridge.cid;
+                        option.text = cartridge.name;
+                        cartridgeSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching cartridges:', error);
+                });
+
+            // Set current date to the date input field
+            const dateInput = document.getElementById('date');
+            const now = new Date();
+            dateInput.value = now.toISOString().substring(0, 10); // Formats the date to YYYY-MM-DD
+
+            // Check if employee ID exists and populate name and department
+            const empIdInput = document.getElementById('empid');
+            empIdInput.addEventListener('change', function() {
+                const empId = empIdInput.value;
+                if (empId) {
+                    fetch(`/api/employee/${empId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`Network response was not ok: ${response.statusText}`);
+                            }
+                            return response.json();
+                        })
+                        .then(employee => {
+                            if (employee) {
+                                document.getElementById('empname').value = employee.empname;
+                                document.getElementById('department').value = employee.department;
+                            } else {
+                                document.getElementById('empname').value = '';
+                                document.getElementById('department').value = '';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching employee:', error);
+                        });
+                }
+            });
+
+            // Populate quantity options based on selected cartridge
+            const cartridgeSelect = document.getElementById('cartridge-id');
+            const quantitySelect = document.getElementById('quantity');
+            cartridgeSelect.addEventListener('change', function() {
+                const selectedCartridgeId = cartridgeSelect.value;
+                fetch(`/api/cartridge/${selectedCartridgeId}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Network response was not ok: ${response.statusText}`);
+                        }
+                        return response.json();
+                    })
+                    .then(cartridge => {
+                        if (cartridge) {
+                            quantitySelect.innerHTML = '';
+                            for (let i = 1; i <= cartridge.quantity; i++) {
+                                const option = document.createElement('option');
+                                option.value = i;
+                                option.textContent = i;
+                                quantitySelect.appendChild(option);
+                            }
+                        } else {
+                            console.error('Cartridge not found.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching cartridge details:', error);
+                    });
+            });
+
+            // Form submission handling
+            document.getElementById('issue-cartridge-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                const formData = new FormData(this);
+                const data = {
+                    empid: formData.get('empid'),
+                    empname: formData.get('empname'),
+                    department: formData.get('department'),
+                    cid: formData.get('cartridge_id'),
+                    quantity: formData.get('quantity'),
+                    date: formData.get('date')
+                };
+
+                fetch('/api/issue-cartridge', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.statusText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    window.location.href = '/issued.html';
+                })
+                .catch(error => {
+                    console.error('Error issuing cartridge:', error);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
