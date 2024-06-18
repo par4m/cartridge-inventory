@@ -143,6 +143,21 @@ app.get('/api/employee/:empid', async (req, res) => {
         }
     });
 
+    app.get('/api/cartridge/:cartridgeId', async (req, res) => {
+    const cartridgeId = req.params.cartridgeId; // Access the dynamic parameter
+    try {
+        // Query the database or perform any necessary operations based on cartridgeId
+        const cartridge = await db.get('SELECT * FROM cartridges WHERE cid = ?', [cartridgeId]);
+        if (cartridge) {
+            res.json(cartridge); // Return the cartridge data as JSON
+        } else {
+            res.status(404).json({ error: 'Cartridge not found' });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 
     const PORT = process.env.PORT || 5000;

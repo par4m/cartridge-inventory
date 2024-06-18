@@ -719,7 +719,50 @@ gap: 0;
 
 /* Style for the pie chart */
 #pie-chart {
-    width: 40%;
+    width: 35%;
     height: 60%;
 }
 
+
+/* style.css */
+.cartridge-card {
+    /* Your existing styles for cartridge cards */
+    background-color: #f2f2f2;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.low-quantity .cartridge-description {
+    background-color: #f8d7da; /* Red background color */
+    border-color: #f5c6cb; /* Red border color */
+}
+
+
+.low-quantity .cartridge-title {
+    background-color: #f8d7da; /* Red background color */
+    border-color: #f5c6cb; /* Red border color */
+}
+
+#pages-used-section {
+    padding: 10px; /* Adjust padding as needed */
+    margin-bottom: 20px; /* Optional: Add margin if needed */
+    /* Adjust height or max-height to reduce the overall size */
+    max-height: 700px; /* Example max-height */
+    /* overflow: auto; Add overflow for scrolling if content exceeds dimensions */
+}
+
+#employee-used-section {
+    margin-top: 10px; /* Adjust the top margin as needed */
+    padding-top: 0; /* Adjust padding if necessary */
+}
+
+#employee-used-section h2 {
+    margin-top: 0; /* Reset margin for the heading if it's causing a gap */
+}
+
+.dashboard-content {
+    padding: 10px; /* Adjust padding as needed */
+    /* Optionally add margin-bottom if you want to separate this section from others */
+    margin-bottom: 20px;
+}
